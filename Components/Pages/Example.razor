@@ -1,0 +1,23 @@
+@page "/example/{greeting?}"
+@rendermode InteractiveServer
+
+<h1>Example Page</h1>
+
+<p>@Message</p>
+<p>hello @Greeting!</p>
+
+<p>Counter Value: @count</p>
+
+<button class="btn btn-primary" @onclick="Increment">Update count</button>
+
+@code {
+    [Parameter] public string Greeting { get; set; }
+    private string Message { get; set; } = "Hellooooooo";
+
+    private int count { get; set; } = 0;
+
+    private void Increment() 
+    {
+        count++;
+    }
+}
