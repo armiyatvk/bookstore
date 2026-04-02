@@ -1,2 +1,2 @@
 # bookstore
-An ASP.NET bookstore
+An ASP.NET Core Blazor Bookstore app

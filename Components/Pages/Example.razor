@@ -4,20 +4,14 @@
 <h1>Example Page</h1>
 
 <p>@Message</p>
-<p>hello @Greeting!</p>
 
-<p>Counter Value: @count</p>
+<p>Welcome, dear @Greeting!</p>
 
-<button class="btn btn-primary" @onclick="Increment">Update count</button>
+<Counter count="100" />
+
+<Counter count="30" />
 
 @code {
-    [Parameter] public string Greeting { get; set; }
-    private string Message { get; set; } = "Hellooooooo";
-
-    private int count { get; set; } = 0;
-
-    private void Increment() 
-    {
-        count++;
-    }
+    [Parameter] public string? Greeting { get; set; }
+    private string Message { get; set; } = "Hello, Blazor!";
 }
