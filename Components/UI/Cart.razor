@@ -31,8 +31,11 @@
         {
             <p>There are not items in the cart</p>
         }
+
+        <button class="btn btn-warning d-block" data-bs-dismiss="offcanvas" @onclick="@(() => NavigationManager.NavigateTo("checkout"))">
+            Proceed to checkout
+        </button>
     </div>
-    <button class="btn btn-warning d-block" data-bs-dismiss="offcanvas" @onclick="@(() => NavigationManager.NavigateTo("checkout"))">Proceed to checkout</button>
 </div>
 
 @code {
