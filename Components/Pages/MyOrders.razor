@@ -1,0 +1,54 @@
+@page "/myorders"
+@using Microsoft.EntityFrameworkCore
+@using Bookstore.Models
+@using Bookstore.Data
+@inject IDbContextFactory<BookstoreDb> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>My Orders</PageTitle>
+
+@if (orders is null) {
+    <p>Loading...</p>
+}
+else if (!orders.Any()) {
+    <p>No orders found.</p>
+}
+else {
+    <div class="container mt-4">
+    @foreach(var order in orders) {
+        <div class="mb-4">
+            <h3 class="mb-3">@order.OrderDate.ToString("MMMM d, yyyy")</h3>
+            <div class="mb-4">
+                @foreach(var item in order.OrderItems) {
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            <strong>@item.Book.Title (@item.Quantity):</strong>
+                        </div>
+                        <div class="col-6">
+                            @item.GetTotal().ToString("c")
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="text-secondary mb-3">
+                <small>Total (@order.OrderItems.Count) : @order.GetTotal().ToString("c")</small>
+            </div>
+            <hr />
+        </div>
+    }
+    </div>
+}
+
+@code {
+    private List<Order>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        orders = await context.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(i => i.Book)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+    }
+}
