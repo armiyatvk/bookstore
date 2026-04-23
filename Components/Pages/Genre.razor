@@ -1,0 +1,47 @@
+@page "/genre/{GenreName}"
+@implements IAsyncDisposable
+@using Microsoft.EntityFrameworkCore
+@using Bookstore.Models
+@inject IDbContextFactory<Bookstore.Data.BookstoreDb> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>Bookstore - Genre: @GenreName</PageTitle>
+
+<h1>Genre: @GenreName</h1>
+
+@if (books is null)
+{
+    <p>Loading...</p>
+}
+else if (!books.Any())
+{
+    <p>No books found in this genre.</p>
+}
+else
+{
+    <div class="hstack flex-wrap gap-3 mt-3">
+        @foreach (var book in books)
+        {
+            <BookCard Book="@book" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string GenreName { get; set; } = default!;
+
+    private BookstoreDb context = default!;
+    private List<Book>? books;
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+        books = await context.Books
+            .Where(b => b.Genre == GenreName)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}
